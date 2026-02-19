@@ -15,17 +15,17 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          cd backend
-          pip install -r requirements.txt
-
       - name: Create .env file
         run: |
           cd backend
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
           echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
           echo "AZURE_STORAGE_CONNECTION_STRING=${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}" >> .env
+
+      - name: Install dependencies into package folder
+        run: |
+          cd backend
+          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
 
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
